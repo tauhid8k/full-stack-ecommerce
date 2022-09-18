@@ -1,9 +1,17 @@
+/* Product Card */
 .productCardImg {
   position: relative;
   height: 220px;
 }
 
-.productCardImg img {
+.productCardImg img,
+.productDetailImg img {
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
+}
+
+/* Product Detail */
+.productDetailImg {
+  position: relative;
+  height: 400px;
 }

@@ -16,6 +16,7 @@ body {
 }
 
 a {
+  display: inline-block;
   color: var(--gray);
 }
 
