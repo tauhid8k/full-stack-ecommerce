@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import styles from '../styles/Product.module.css';
-import { BsCartPlus } from 'react-icons/bs';
 import Image from 'next/image';
 
 const ProductItem = ({ product }) => {
@@ -18,7 +17,7 @@ const ProductItem = ({ product }) => {
               alt=""
             />
           </div>
-          <div className="card-body p-3">
+          <div className="card-body p-3 shadow-sm rounded-b">
             <div className="font-semibold text-xl text-gray-900 mb-1">
               {product.name}
             </div>
