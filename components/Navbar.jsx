@@ -13,7 +13,7 @@ const Navbar = () => {
             <a className="text-2xl uppercase font-semibold">ECommerce</a>
           </Link>
           <div className="flex gap-5 text-2xl">
-            <div>
+            <div className="cursor-pointer">
               <HiOutlineSearch />
             </div>
             <Link href="/login">

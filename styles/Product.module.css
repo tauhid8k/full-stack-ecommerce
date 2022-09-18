@@ -1,0 +1,9 @@
+.productCardImg {
+  position: relative;
+  height: 220px;
+}
+
+.productCardImg img {
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
