@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import styles from '../styles/Product.module.css';
 import Image from 'next/image';
+import Rating from './Rating';
 
 const ProductItem = ({ product }) => {
   return (
@@ -25,7 +26,9 @@ const ProductItem = ({ product }) => {
               <div className="text-xl text-red-500 font-medium">
                 ${product.price}
               </div>
-              <div className="text-xl text-gray-700">Rating</div>
+              <div className="text-lg">
+                <Rating value={product.rating} />
+              </div>
             </div>
             <div className="flex gap-2">
               <button className="btn btn-light-secondary grow font-bold">
