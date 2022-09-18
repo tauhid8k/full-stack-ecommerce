@@ -1,20 +1,26 @@
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --primary: #77a6f6;
+  --primary: #0cbd8c;
   --bg-light: #f4f7fc;
-  --dark: #444;
+  --gray: #4b5563;
 }
 
 body {
   font-family: 'Quicksand', sans-serif;
   font-weight: 400;
   background-color: var(--bg-light);
-  color: var(--dark);
+  color: var(--gray);
+}
+
+a {
+  color: var(--gray);
+}
+
+.container {
+  width: min(100%, 1170px);
+  padding: 0px 15px;
+  margin: 0 auto;
 }

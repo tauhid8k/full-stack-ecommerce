@@ -1,0 +1,19 @@
+.cartLink {
+  position: relative;
+}
+
+.cartCountIcon {
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  top: -35%;
+  right: -35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+}
