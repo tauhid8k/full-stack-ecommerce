@@ -1,26 +1,39 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { Layout, Rating } from '../../components';
 import data from '../../utils/data';
 import styles from '../../styles/Product.module.css';
+import { useRouter } from 'next/router';
+import { Layout, Rating } from '../../components';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../redux/cartSlice';
 
 const ProductScreen = () => {
   const router = useRouter();
   const { slug } = router.query;
+  const dispatch = useDispatch();
   const product = data.products.find((x) => x.slug === slug);
 
   if (!product) {
     return <div>Product Not Found!</div>;
   }
 
+  const addToCartHandler = () => {
+    dispatch(
+      addToCart({
+        slug: product.slug,
+        name: product.name,
+        image: product.image,
+        price: product.price,
+        countInStock: product.countInStock,
+      })
+    );
+  };
+
   return (
     <Layout title={product.name}>
       <div className="mt-5">
         <Link href="/">
-          <a className="btn btn-light-warning text-gray-700 font-semibold mb-4">
-            Go Back
-          </a>
+          <a className="btn btn-outline-primary font-semibold mb-4">Go Back</a>
         </Link>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="md:col-span-2">
@@ -64,11 +77,16 @@ const ProductScreen = () => {
               </li>
               <li className="list-item flex items-center">
                 <span className="text-xl font-semibold mr-2">Price:</span>
-                <span className="font-medium text-lg">${product.price}</span>
+                <span className="font-medium text-lg text-red-500">
+                  ${product.price}
+                </span>
               </li>
             </ul>
             <div className="flex gap-2">
-              <button className="btn btn-light-secondary font-bold">
+              <button
+                onClick={() => addToCartHandler()}
+                className="btn btn-light-secondary font-bold"
+              >
                 Add to Cart
               </button>
               <button className="btn btn-light-warning font-bold">

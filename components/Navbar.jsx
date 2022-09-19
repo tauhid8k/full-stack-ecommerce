@@ -3,8 +3,11 @@ import styles from '../styles/Navbar.module.css';
 import { BsCart } from 'react-icons/bs';
 import { FiUser } from 'react-icons/fi';
 import { HiOutlineSearch } from 'react-icons/hi';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
+  const { totalItemsCount } = useSelector((state) => state.cart);
+
   return (
     <div className="h-14 bg-white flex items-center">
       <div className="container">
@@ -24,7 +27,7 @@ const Navbar = () => {
             <Link href="/cart">
               <a className={`${styles.cartLink}`}>
                 <BsCart />
-                <span className={styles.cartCountIcon}>84</span>
+                <span className={styles.cartCountIcon}>{totalItemsCount}</span>
               </a>
             </Link>
           </div>
