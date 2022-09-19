@@ -2,16 +2,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import data from '../../utils/data';
 import styles from '../../styles/Product.module.css';
+import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { Layout, Rating } from '../../components';
-import toast, { Toaster } from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/cartSlice';
 
 const ProductScreen = () => {
   const router = useRouter();
-  const { slug } = router.query;
   const dispatch = useDispatch();
+  const { slug } = router.query;
+  const { totalItemsCount } = useSelector((state) => state.cart);
   const product = data.products.find((x) => x.slug === slug);
 
   if (!product) {
@@ -24,8 +25,8 @@ const ProductScreen = () => {
       return;
     }
 
-    // See if the item is actually in stock
-    if (product.countInStock < qty) {
+    // See if the item selected quantity is actually in stock
+    if (qty > product.countInStock || totalItemsCount >= product.countInStock) {
       toast.error('Quantity exceeds stock');
       return;
     }
