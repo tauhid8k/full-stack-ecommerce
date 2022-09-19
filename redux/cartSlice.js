@@ -29,8 +29,8 @@ const cartSlice = createSlice({
           image: newItem.image,
           price: newItem.price,
           countInStock: newItem.countInStock,
-          qty: newItem.qty ? newItem.qty : 1,
-          totalPrice: newItem.qty ? newItem.price * newItem.qty : newItem.price,
+          qty: newItem.qty,
+          totalPrice: newItem.price * newItem.qty,
         });
         state.totalItemsCount++;
         state.totalUniqueItems++;
