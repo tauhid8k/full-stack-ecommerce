@@ -4,7 +4,11 @@ import styles from '../styles/Cart.module.css';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { Layout } from '../components';
-import { removeFromCart } from '../redux/cartSlice';
+import {
+  removeFromCart,
+  itemQtyIncrement,
+  itemQtyDecrement,
+} from '../redux/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
 
@@ -57,7 +61,10 @@ const CartScreen = () => {
                       <h4 className="font-medium text-lg">{item.name}</h4>
                     </div>
                     <div className="font-medium text-lg flex gap-2">
-                      <button className="btn btn-light-primary rounded-full p-2">
+                      <button
+                        onClick={() => dispatch(itemQtyDecrement(item.slug))}
+                        className="btn btn-light-primary rounded-full p-2"
+                      >
                         <AiOutlineMinus />
                       </button>
                       <div
@@ -68,7 +75,10 @@ const CartScreen = () => {
                       >
                         {item.qty}
                       </div>
-                      <button className="btn btn-light-primary rounded-full p-2">
+                      <button
+                        onClick={() => dispatch(itemQtyIncrement(item.slug))}
+                        className="btn btn-light-primary rounded-full p-2"
+                      >
                         <AiOutlinePlus />
                       </button>
                     </div>
