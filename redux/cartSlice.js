@@ -6,6 +6,7 @@ const cartSlice = createSlice({
     cartItems: [],
     totalItemsCount: 0,
     totalUniqueItems: 0,
+    totalPrice: 0,
   },
 
   reducers: {
@@ -19,8 +20,9 @@ const cartSlice = createSlice({
 
       if (existItem) {
         existItem.qty++;
+        existItem.totalQtyPrice += newItem.price;
+        state.totalPrice += newItem.price;
         state.totalItemsCount++;
-        existItem.totalPrice += newItem.price;
       } else {
         state.cartItems.push({
           slug: newItem.slug,
@@ -29,8 +31,9 @@ const cartSlice = createSlice({
           price: newItem.price,
           countInStock: newItem.countInStock,
           qty: newItem.qty,
-          totalPrice: newItem.price * newItem.qty,
+          totalQtyPrice: newItem.price * newItem.qty,
         });
+        state.totalPrice += newItem.price;
         state.totalItemsCount++;
         state.totalUniqueItems++;
       }
