@@ -1,3 +1,15 @@
+.cartImg {
+  display: flex;
+}
+
 .cartImg img {
   border-radius: 0.25rem;
+}
+
+.cartList {
+  @apply flex gap-4 items-center justify-between p-3 border-b;
+}
+
+.cartList:last-child {
+  border-bottom: none;
 }
