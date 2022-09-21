@@ -19,6 +19,12 @@ const cartSlice = createSlice({
       );
 
       if (existItem) {
+        // Quantity Increment limit if exceeds stock
+        if (existItem.qty === existItem.countInStock - 1) {
+          existItem.qtyLimit = true;
+        }
+
+        // Quantity & Price Increment
         existItem.qty++;
         existItem.totalQtyPrice += newItem.price;
         state.totalPrice += newItem.price;
@@ -31,6 +37,7 @@ const cartSlice = createSlice({
           price: newItem.price,
           countInStock: newItem.countInStock,
           qty: newItem.qty,
+          qtyLimit: false,
           totalQtyPrice: newItem.price * newItem.qty,
         });
         state.totalPrice += newItem.price;
@@ -51,6 +58,13 @@ const cartSlice = createSlice({
     itemQtyIncrement(state, action) {
       const slug = action.payload;
       const existItem = state.cartItems.find((item) => item.slug === slug);
+
+      // Quantity Increment limit if exceeds stock
+      if (existItem.qty === existItem.countInStock - 1) {
+        existItem.qtyLimit = true;
+      }
+
+      // If Stock available
       existItem.qty++;
       existItem.totalQtyPrice = existItem.price * existItem.qty;
       state.totalPrice += existItem.price;
@@ -65,6 +79,7 @@ const cartSlice = createSlice({
         state.totalPrice -= existItem.totalQtyPrice;
         state.totalUniqueItems--;
       } else {
+        existItem.qtyLimit = false;
         existItem.qty--;
         existItem.totalQtyPrice = existItem.price * existItem.qty;
         state.totalPrice -= existItem.price;

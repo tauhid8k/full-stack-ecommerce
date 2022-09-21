@@ -12,7 +12,7 @@ const ProductScreen = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { slug } = router.query;
-  const { totalItemsCount } = useSelector((state) => state.cart);
+  const { cartItems } = useSelector((state) => state.cart);
   const product = data.products.find((x) => x.slug === slug);
 
   if (!product) {
@@ -20,17 +20,16 @@ const ProductScreen = () => {
   }
 
   const addToCartHandler = (qty) => {
-    if (qty <= 0) {
-      toast.error('Quantity is invalid');
-      return;
+    // See if the item quantity is actually in stock
+    const item = cartItems.find((x) => x.slug === slug);
+    if (item) {
+      if (item.qtyLimit) {
+        toast.error('Quantity exceeds stock');
+        return;
+      }
     }
 
-    // See if the item selected quantity is actually in stock
-    if (qty > product.countInStock || totalItemsCount >= product.countInStock) {
-      toast.error('Quantity exceeds stock');
-      return;
-    }
-
+    // Add item to Cart
     dispatch(
       addToCart({
         slug: product.slug,
@@ -81,7 +80,11 @@ const ProductScreen = () => {
                 <li className="list-item flex items-center">
                   <h4>
                     <span className="text-xl font-semibold mr-2">Status:</span>
-                    <span className="font-medium text-lg">
+                    <span
+                      className={`font-medium text-lg ${
+                        product.countInStock <= 0 ? 'text-red-500' : ''
+                      } `}
+                    >
                       {product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
                     </span>
                   </h4>
@@ -101,17 +104,19 @@ const ProductScreen = () => {
                   </span>
                 </li>
               </ul>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => addToCartHandler(1)}
-                  className="btn btn-light-secondary font-bold"
-                >
-                  Add to Cart
-                </button>
-                <button className="btn btn-light-warning font-bold">
-                  Buy Now
-                </button>
-              </div>
+              {product.countInStock && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => addToCartHandler(1)}
+                    className="btn btn-light-secondary font-bold"
+                  >
+                    Add to Cart
+                  </button>
+                  <button className="btn btn-light-warning font-bold">
+                    Buy Now
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

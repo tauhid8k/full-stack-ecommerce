@@ -19,8 +19,13 @@ const CartScreen = () => {
     (state) => state.cart
   );
 
-  const removeFromCartHandler = (slug) => {
-    dispatch(removeFromCart(slug));
+  const itemQtyIncrementHandler = (slug, qtyLimit) => {
+    if (qtyLimit) {
+      toast.error('Quantity exceeds stock');
+      return;
+    }
+
+    dispatch(itemQtyIncrement(slug));
   };
 
   return (
@@ -58,7 +63,12 @@ const CartScreen = () => {
                           height={100}
                         />
                       </div>
-                      <h4 className="font-medium text-lg">{item.name}</h4>
+
+                      <Link href={`/product/${item.slug}`}>
+                        <a className="font-medium text-lg hover:underline hover:underline-offset-2">
+                          {item.name}
+                        </a>
+                      </Link>
                     </div>
                     <div className="font-medium text-lg flex gap-2">
                       <button
@@ -76,7 +86,9 @@ const CartScreen = () => {
                         {item.qty}
                       </div>
                       <button
-                        onClick={() => dispatch(itemQtyIncrement(item.slug))}
+                        onClick={() =>
+                          itemQtyIncrementHandler(item.slug, item.qtyLimit)
+                        }
                         className="btn btn-light-primary rounded-full p-2"
                       >
                         <AiOutlinePlus />
@@ -88,7 +100,7 @@ const CartScreen = () => {
                       </h4>
                     </div>
                     <button
-                      onClick={() => removeFromCartHandler(item.slug)}
+                      onClick={() => dispatch(removeFromCart(item.slug))}
                       className="btn btn-light-danger"
                     >
                       Remove
