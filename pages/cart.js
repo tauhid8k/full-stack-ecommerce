@@ -4,29 +4,14 @@ import styles from '../styles/Cart.module.css';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { Layout } from '../components';
-import {
-  removeFromCart,
-  itemQtyIncrement,
-  itemQtyDecrement,
-} from '../redux/cartSlice';
+import { removeFromCart } from '../redux/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
 
 const CartScreen = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { cartItems, totalItemsCount, totalPrice } = useSelector(
-    (state) => state.cart
-  );
-
-  const itemQtyIncrementHandler = (slug, qtyLimit) => {
-    if (qtyLimit) {
-      toast.error('Quantity exceeds stock');
-      return;
-    }
-
-    dispatch(itemQtyIncrement(slug));
-  };
+  const { cartItems } = useSelector((state) => state.cart);
 
   return (
     <>
@@ -72,32 +57,23 @@ const CartScreen = () => {
                     </div>
                     <div className="font-medium text-lg flex gap-2">
                       <button
-                        onClick={() => dispatch(itemQtyDecrement(item.slug))}
+                        onClick={() => {}}
                         className="btn btn-light-primary rounded-full p-2"
                       >
                         <AiOutlineMinus />
                       </button>
-                      <div
-                        onDoubleClick={() =>
-                          toast.error('Cannot change quantity directly')
-                        }
-                        className="border rounded px-1 text-center w-20"
-                      >
+                      <div className="border rounded px-1 text-center w-20">
                         {item.qty}
                       </div>
                       <button
-                        onClick={() =>
-                          itemQtyIncrementHandler(item.slug, item.qtyLimit)
-                        }
+                        onClick={() => {}}
                         className="btn btn-light-primary rounded-full p-2"
                       >
                         <AiOutlinePlus />
                       </button>
                     </div>
                     <div className="font-medium text-lg">
-                      <h4 className="text-red-500 font-semibold">
-                        ${item.totalQtyPrice}
-                      </h4>
+                      <h4 className="text-red-500 font-semibold">${0}</h4>
                     </div>
                     <button
                       onClick={() => dispatch(removeFromCart(item.slug))}
@@ -111,10 +87,10 @@ const CartScreen = () => {
               <div className="bg-white shadow-sm px-4 py-3 rounded h-fit">
                 <h4 className="flex justify-between items-center mb-4">
                   <span className="text-xl font-semibold mr-2">
-                    Subtotal ({totalItemsCount}):
+                    Subtotal ({0}):
                   </span>
                   <span className="font-semibold text-lg text-red-500">
-                    ${totalPrice}
+                    ${0}
                   </span>
                 </h4>
                 <button

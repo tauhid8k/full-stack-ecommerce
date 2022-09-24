@@ -4,95 +4,33 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState: {
     cartItems: [],
-    totalItemsCount: 0,
-    totalUniqueItems: 0,
-    totalPrice: 0,
   },
 
   reducers: {
     addToCart(state, action) {
       const newItem = action.payload;
 
-      // check if the item is already in cart (so only increase quantity & price)
+      // check if the item is already in cart
       const existItem = state.cartItems.find(
         (item) => item.slug === newItem.slug
       );
 
+      // If item is already in cart then increase only qty & price
+      // Otherwise add new item to the cart
       if (existItem) {
-        // Quantity Increment limit if exceeds stock
-        if (existItem.qty === existItem.countInStock - 1) {
-          existItem.qtyLimit = true;
-        }
-
-        // Quantity & Price Increment
-        existItem.qty++;
-        existItem.totalQtyPrice += newItem.price;
-        state.totalPrice += newItem.price;
-        state.totalItemsCount++;
+        state.cartItems = state.cartItems.map((item) =>
+          item.slug === existItem.slug ? { ...item, qty: item.qty + 1 } : item
+        );
       } else {
-        state.cartItems.push({
-          slug: newItem.slug,
-          name: newItem.name,
-          image: newItem.image,
-          price: newItem.price,
-          countInStock: newItem.countInStock,
-          qty: newItem.qty,
-          qtyLimit: false,
-          totalQtyPrice: newItem.price * newItem.qty,
-        });
-        state.totalPrice += newItem.price;
-        state.totalItemsCount++;
-        state.totalUniqueItems++;
+        state.cartItems = [...state.cartItems, newItem];
       }
     },
     removeFromCart(state, action) {
       const slug = action.payload;
-      const existItem = state.cartItems.find((item) => item.slug === slug);
-      if (existItem) {
-        state.cartItems = state.cartItems.filter((item) => item.slug !== slug);
-        state.totalItemsCount -= existItem.qty;
-        state.totalPrice -= existItem.totalQtyPrice;
-        state.totalUniqueItems--;
-      }
-    },
-    itemQtyIncrement(state, action) {
-      const slug = action.payload;
-      const existItem = state.cartItems.find((item) => item.slug === slug);
-
-      // Quantity Increment limit if exceeds stock
-      if (existItem.qty === existItem.countInStock - 1) {
-        existItem.qtyLimit = true;
-      }
-
-      // If Stock available
-      existItem.qty++;
-      existItem.totalQtyPrice = existItem.price * existItem.qty;
-      state.totalPrice += existItem.price;
-      state.totalItemsCount++;
-    },
-    itemQtyDecrement(state, action) {
-      const slug = action.payload;
-      const existItem = state.cartItems.find((item) => item.slug === slug);
-      if (existItem.qty === 1) {
-        state.cartItems = state.cartItems.filter((item) => item.slug !== slug);
-        state.totalItemsCount -= existItem.qty;
-        state.totalPrice -= existItem.totalQtyPrice;
-        state.totalUniqueItems--;
-      } else {
-        existItem.qtyLimit = false;
-        existItem.qty--;
-        existItem.totalQtyPrice = existItem.price * existItem.qty;
-        state.totalPrice -= existItem.price;
-        state.totalItemsCount--;
-      }
+      state.cartItems = state.cartItems.filter((item) => item.slug !== slug);
     },
   },
 });
 
-export const {
-  addToCart,
-  removeFromCart,
-  itemQtyIncrement,
-  itemQtyDecrement,
-} = cartSlice.actions;
+export const { addToCart, removeFromCart } = cartSlice.actions;
 export const cartReducer = cartSlice.reducer;

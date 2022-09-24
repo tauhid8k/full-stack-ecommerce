@@ -21,7 +21,7 @@ const data = {
       brand: 'Adidas',
       rating: 3.2,
       numReviews: 10,
-      countInStock: 5,
+      countInStock: 0,
       description: 'A popular shirt',
     },
     {
