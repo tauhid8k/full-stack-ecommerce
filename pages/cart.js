@@ -4,9 +4,8 @@ import styles from '../styles/Cart.module.css';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { Layout } from '../components';
-import { removeFromCart } from '../redux/cartSlice';
+import { removeFromCart, updateCartQty } from '../redux/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
 import useCart from '../utils/useCart';
 
 const CartScreen = () => {
@@ -14,6 +13,10 @@ const CartScreen = () => {
   const dispatch = useDispatch();
   const { totalQty, totalPrice } = useCart();
   const { cartItems } = useSelector((state) => state.cart);
+
+  const updateCartQtyHandler = (slug, qty) => {
+    dispatch(updateCartQty({ slug, qty }));
+  };
 
   return (
     <>
@@ -58,24 +61,27 @@ const CartScreen = () => {
                       </Link>
                     </div>
                     <div className="font-medium text-lg flex gap-2">
-                      <button
-                        onClick={() => {}}
-                        className="btn btn-light-primary rounded-full p-2"
+                      <select
+                        value={item.qty}
+                        onChange={(e) =>
+                          updateCartQtyHandler(
+                            item.slug,
+                            Number(e.target.value)
+                          )
+                        }
+                        className="form-select w-24 font-medium py-1 text-center text-lg"
                       >
-                        <AiOutlineMinus />
-                      </button>
-                      <div className="border rounded px-1 text-center w-20">
-                        {item.qty}
-                      </div>
-                      <button
-                        onClick={() => {}}
-                        className="btn btn-light-primary rounded-full p-2"
-                      >
-                        <AiOutlinePlus />
-                      </button>
+                        {[...Array(item.countInStock).keys()].map((x) => (
+                          <option key={x + 1} value={x + 1}>
+                            {x + 1}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="font-medium text-lg">
-                      <h4 className="text-red-500 font-semibold">${0}</h4>
+                      <h4 className="text-red-500 font-semibold">
+                        ${item.price * item.qty}
+                      </h4>
                     </div>
                     <button
                       onClick={() => dispatch(removeFromCart(item.slug))}
