@@ -20,8 +20,15 @@ const ProductScreen = () => {
   }
 
   // Add item to Cart
-  const addToCartHandler = () => {
-    dispatch(addToCart({ ...product, qty: 1 }));
+  const addToCartHandler = (qty) => {
+    // Check stock before add item to the cart
+    const cartItem = cartItems.find((item) => item.slug === product.slug);
+    if (qty >= product.countInStock || cartItem?.qty >= product.countInStock) {
+      toast.error('Quantity exceeds stock');
+      return;
+    }
+    // Add to cart
+    dispatch(addToCart({ ...product, qty }));
     toast.success('Item Added to Cart');
   };
 
@@ -88,7 +95,7 @@ const ProductScreen = () => {
               </ul>
               <div className="flex gap-2">
                 <button
-                  onClick={() => addToCartHandler()}
+                  onClick={() => addToCartHandler(1)}
                   className="btn btn-light-secondary font-bold"
                 >
                   Add to Cart
