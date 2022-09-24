@@ -7,10 +7,12 @@ import { Layout } from '../components';
 import { removeFromCart } from '../redux/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
+import useCart from '../utils/useCart';
 
 const CartScreen = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { totalQty, totalPrice } = useCart();
   const { cartItems } = useSelector((state) => state.cart);
 
   return (
@@ -87,10 +89,10 @@ const CartScreen = () => {
               <div className="bg-white shadow-sm px-4 py-3 rounded h-fit">
                 <h4 className="flex justify-between items-center mb-4">
                   <span className="text-xl font-semibold mr-2">
-                    Subtotal ({0}):
+                    Subtotal ({totalQty}):
                   </span>
                   <span className="font-semibold text-lg text-red-500">
-                    ${0}
+                    ${totalPrice}
                   </span>
                 </h4>
                 <button
