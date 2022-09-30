@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import styles from '../styles/Cart.module.css';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
@@ -116,4 +117,4 @@ const CartScreen = () => {
   );
 };
 
-export default CartScreen;
+export default dynamic(() => Promise.resolve(CartScreen), { ssr: false });

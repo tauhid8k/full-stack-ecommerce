@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import styles from '../styles/Navbar.module.css';
+import { useState, useEffect } from 'react';
 import { BsCart } from 'react-icons/bs';
 import { FiUser } from 'react-icons/fi';
 import { HiOutlineSearch } from 'react-icons/hi';
@@ -7,6 +8,12 @@ import useCart from '../utils/useCart';
 
 const Navbar = () => {
   const { totalQty } = useCart();
+  const [totalItemsCount, setTotalItemsCount] = useState(0);
+
+  useEffect(() => {
+    setTotalItemsCount(totalQty);
+  }, [totalQty]);
+
   return (
     <div className="h-14 bg-white flex items-center">
       <div className="container">
@@ -26,7 +33,7 @@ const Navbar = () => {
             <Link href="/cart">
               <a className={`${styles.cartLink}`}>
                 <BsCart />
-                <span className={styles.cartCountIcon}>{totalQty}</span>
+                <span className={styles.cartCountIcon}>{totalItemsCount}</span>
               </a>
             </Link>
           </div>

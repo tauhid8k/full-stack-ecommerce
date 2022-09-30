@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
+import cookies from 'js-cookie';
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState: {
-    cartItems: [],
+    cartItems: cookies.get('cart') ? JSON.parse(cookies.get('cart')) : [],
   },
 
   reducers: {
@@ -17,23 +18,28 @@ const cartSlice = createSlice({
 
       // If item is already in cart then increase only qty & price
       // Otherwise add new item to the cart
-      if (existItem) {
-        state.cartItems = state.cartItems.map((item) =>
-          item.slug === existItem.slug ? { ...item, qty: item.qty + 1 } : item
-        );
-      } else {
-        state.cartItems = [...state.cartItems, newItem];
-      }
+
+      const cartItems = existItem
+        ? state.cartItems.map((item) =>
+            item.slug === existItem.slug ? { ...item, qty: item.qty + 1 } : item
+          )
+        : [...state.cartItems, newItem];
+      cookies.set('cart', JSON.stringify(cartItems));
+      state.cartItems = cartItems;
     },
     removeFromCart(state, action) {
       const slug = action.payload;
-      state.cartItems = state.cartItems.filter((item) => item.slug !== slug);
+      const filteredItem = state.cartItems.filter((item) => item.slug !== slug);
+      cookies.set('cart', JSON.stringify(filteredItem));
+      state.cartItems = filteredItem;
     },
     updateCartQty(state, action) {
       const updateItem = action.payload;
-      state.cartItems = state.cartItems.map((item) =>
+      const updateCart = state.cartItems.map((item) =>
         item.slug === updateItem.slug ? { ...item, qty: updateItem.qty } : item
       );
+      cookies.set('cart', JSON.stringify(updateCart));
+      state.cartItems = updateCart;
     },
   },
 });
