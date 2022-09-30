@@ -23,7 +23,7 @@ const CartScreen = () => {
     <>
       <Toaster />
       <Layout title="Shopping Cart">
-        <div className="mt-5">
+        <div className="mt-24">
           <Link href="/">
             <a className="btn btn-outline-primary font-semibold mb-4">
               Go Back

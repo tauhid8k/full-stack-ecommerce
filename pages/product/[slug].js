@@ -36,7 +36,7 @@ const ProductScreen = () => {
     <>
       <Toaster />
       <Layout title={product.name}>
-        <div className="mt-5">
+        <div className="mt-20">
           <Link href="/">
             <a className="btn btn-outline-primary font-semibold mb-4">
               Go Back
