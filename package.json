@@ -10,12 +10,15 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.5",
+    "bcryptjs": "^2.4.3",
     "js-cookie": "^3.0.1",
     "kutty": "^0.6.0",
     "mongoose": "^6.6.3",
     "next": "12.3.0",
+    "next-auth": "^4.12.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.36.1",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.4.0",
     "react-redux": "^8.0.2"

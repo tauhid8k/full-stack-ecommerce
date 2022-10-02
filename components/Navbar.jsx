@@ -6,10 +6,12 @@ import { FiUser } from 'react-icons/fi';
 import { HiOutlineSearch } from 'react-icons/hi';
 import { VscMenu } from 'react-icons/vsc';
 import useCart from '../utils/useCart';
+import { useSession } from 'next-auth/react';
 
 const Navbar = () => {
   const { totalQty } = useCart();
   const [totalItemsCount, setTotalItemsCount] = useState(0);
+  const { status, data: session } = useSession();
 
   useEffect(() => {
     setTotalItemsCount(totalQty);
@@ -46,15 +48,23 @@ const Navbar = () => {
               />
             </form>
           </div>
-          <div className="flex gap-5 text-2xl">
+          <div className="flex gap-5 text-2xl items-center">
             <div className="cursor-pointer md:hidden">
               <HiOutlineSearch />
             </div>
-            <Link href="/login">
-              <a>
-                <FiUser />
-              </a>
-            </Link>
+            {status === 'loading' ? (
+              <div class="spinner w-4 h-4" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            ) : session?.user ? (
+              <h4 className="text-lg">{session.user.name}</h4>
+            ) : (
+              <Link href="/login">
+                <a>
+                  <FiUser />
+                </a>
+              </Link>
+            )}
             <Link href="/cart">
               <a className={`${styles.cartLink}`}>
                 <BsCart />

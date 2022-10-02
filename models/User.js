@@ -10,6 +10,13 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Encrypt password before user doc saved to db
+userSchema.pre('save', async function (next) {
+  const salt = await bcrypt.genSalt();
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 export default User;
