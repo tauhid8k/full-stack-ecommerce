@@ -1,21 +1,43 @@
 import Link from 'next/link';
 import styles from '../styles/Navbar.module.css';
+import useCart from '../utils/useCart';
 import { useState, useEffect } from 'react';
 import { BsCart } from 'react-icons/bs';
 import { FiUser } from 'react-icons/fi';
-import { HiOutlineSearch } from 'react-icons/hi';
+import { useDispatch } from 'react-redux';
+import { resetCart } from '../redux/cartSlice';
+import {
+  HiOutlineSearch,
+  HiOutlineLogout,
+  HiOutlineCalendar,
+  HiOutlineUserCircle,
+  HiOutlineChevronDown,
+} from 'react-icons/hi';
 import { VscMenu } from 'react-icons/vsc';
-import useCart from '../utils/useCart';
-import { useSession } from 'next-auth/react';
+import { Menu } from '@headlessui/react';
+import { signOut, useSession } from 'next-auth/react';
+import DropdownLink from './DropdownLink';
+import cookies from 'js-cookie';
 
 const Navbar = () => {
   const { totalQty } = useCart();
   const [totalItemsCount, setTotalItemsCount] = useState(0);
   const { status, data: session } = useSession();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setTotalItemsCount(totalQty);
   }, [totalQty]);
+
+  const logoutClickHandler = () => {
+    dispatch(
+      resetCart({
+        cartItems: [],
+      })
+    );
+    cookies.remove('cart');
+    signOut({ callbackUrl: '/login' });
+  };
 
   return (
     <div className="h-16 bg-white flex items-center fixed w-full z-10">
@@ -53,11 +75,43 @@ const Navbar = () => {
               <HiOutlineSearch />
             </div>
             {status === 'loading' ? (
-              <div class="spinner w-4 h-4" role="status">
-                <span class="sr-only">Loading...</span>
+              <div className="spinner w-4 h-4" role="status">
+                <span className="sr-only">Loading...</span>
               </div>
             ) : session?.user ? (
-              <h4 className="text-lg">{session.user.name}</h4>
+              <Menu as="div" className="relative inline-block">
+                <Menu.Button className="text-lg font-medium flex items-center gap-1">
+                  <span>{session.user.name}</span>
+                  <HiOutlineChevronDown />
+                </Menu.Button>
+                <Menu.Items className="absolute right-0 origin-top-right bg-white w-56 rounded-md border shadow-sm">
+                  <Menu.Item>
+                    <DropdownLink className="dropdown-link" href="/profile">
+                      <HiOutlineUserCircle />
+                      <span>Profile</span>
+                    </DropdownLink>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <DropdownLink
+                      className="dropdown-link"
+                      href="/order-history"
+                    >
+                      <HiOutlineCalendar />
+                      <span>Order History</span>
+                    </DropdownLink>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <a
+                      onClick={logoutClickHandler}
+                      className="dropdown-link"
+                      href="#"
+                    >
+                      <HiOutlineLogout />
+                      <span>Logout</span>
+                    </a>
+                  </Menu.Item>
+                </Menu.Items>
+              </Menu>
             ) : (
               <Link href="/login">
                 <a>

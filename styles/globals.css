@@ -25,3 +25,11 @@ a {
   padding: 0px 15px;
   margin: 0 auto;
 }
+
+/* Dropdown Link */
+.dropdown-link {
+  @apply flex items-center gap-2 py-2 px-3 hover:bg-gray-100 text-lg font-medium;
+}
+.dropdown-link:hover {
+  color: var(--primary);
+}
