@@ -10,6 +10,9 @@ const cartSlice = createSlice({
     shippingAddress: cookies.get('cart')
       ? JSON.parse(cookies.get('cart')).shippingAddress
       : {},
+    paymentMethod: cookies.get('cart')
+      ? JSON.parse(cookies.get('cart')).paymentMethod
+      : 0,
   },
 
   reducers: {
@@ -52,6 +55,9 @@ const cartSlice = createSlice({
     saveShippingAddress(state, action) {
       state.shippingAddress = action.payload;
     },
+    setPaymentMethod(state, action) {
+      state.paymentMethod = action.payload;
+    },
   },
 });
 
@@ -61,5 +67,6 @@ export const {
   updateCartQty,
   resetCart,
   saveShippingAddress,
+  setPaymentMethod,
 } = cartSlice.actions;
 export const cartReducer = cartSlice.reducer;
