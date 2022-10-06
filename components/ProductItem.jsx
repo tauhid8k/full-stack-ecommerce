@@ -5,15 +5,18 @@ import Rating from './Rating';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../redux/cartSlice';
+import axios from 'axios';
 
 const ProductItem = ({ product }) => {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
 
-  const addToCartHandler = (qty, product) => {
+  const addToCartHandler = async (qty, product) => {
     // Check stock before add item to the cart
     const cartItem = cartItems.find((item) => item.slug === product.slug);
-    if (qty >= product.countInStock || cartItem?.qty >= product.countInStock) {
+    const { data } = await axios.get(`/api/products/${product._id}`);
+
+    if (qty >= data.countInStock || cartItem?.qty >= data.countInStock) {
       toast.error('Quantity exceeds stock');
       return;
     }
