@@ -4,7 +4,12 @@ import cookies from 'js-cookie';
 const cartSlice = createSlice({
   name: 'cart',
   initialState: {
-    cartItems: cookies.get('cart') ? JSON.parse(cookies.get('cart')) : [],
+    cartItems: cookies.get('cart')
+      ? JSON.parse(cookies.get('cart')).cartItems
+      : [],
+    shippingAddress: cookies.get('cart')
+      ? JSON.parse(cookies.get('cart')).shippingAddress
+      : {},
   },
 
   reducers: {
@@ -24,13 +29,13 @@ const cartSlice = createSlice({
             item.slug === existItem.slug ? { ...item, qty: item.qty + 1 } : item
           )
         : [...state.cartItems, newItem];
-      cookies.set('cart', JSON.stringify(cartItems));
+      cookies.set('cart', JSON.stringify({ cartItems }));
       state.cartItems = cartItems;
     },
     removeFromCart(state, action) {
       const slug = action.payload;
       const filteredItem = state.cartItems.filter((item) => item.slug !== slug);
-      cookies.set('cart', JSON.stringify(filteredItem));
+      cookies.set('cart', JSON.stringify({ cartItems: filteredItem }));
       state.cartItems = filteredItem;
     },
     updateCartQty(state, action) {
@@ -38,12 +43,14 @@ const cartSlice = createSlice({
       const updateCart = state.cartItems.map((item) =>
         item.slug === updateItem.slug ? { ...item, qty: updateItem.qty } : item
       );
-      cookies.set('cart', JSON.stringify(updateCart));
+      cookies.set('cart', JSON.stringify({ cartItems: updateCart }));
       state.cartItems = updateCart;
     },
-    resetCart(state, action) {
-      const resetCart = action.payload;
-      state.cartItems = resetCart.cartItems;
+    resetCart(state) {
+      state.cartItems = [];
+    },
+    saveShippingAddress(state, action) {
+      state.shippingAddress = action.payload;
     },
   },
 });
@@ -53,5 +60,6 @@ export const {
   removeFromCart,
   updateCartQty,
   resetCart,
+  saveShippingAddress,
 } = cartSlice.actions;
 export const cartReducer = cartSlice.reducer;

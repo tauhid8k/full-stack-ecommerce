@@ -30,12 +30,8 @@ const Navbar = () => {
   }, [totalQty]);
 
   const logoutClickHandler = () => {
-    dispatch(
-      resetCart({
-        cartItems: [],
-      })
-    );
-    cookies.remove('cart');
+    dispatch(resetCart());
+    if (cookies.get('cart')) cookies.remove('cart');
     signOut({ callbackUrl: '/login' });
   };
 
