@@ -26,6 +26,13 @@ a {
   margin: 0 auto;
 }
 
+/* Full screen */
+.full-screen {
+  min-height: calc(100vh - 4rem);
+  display: grid;
+  place-items: center;
+}
+
 /* Dropdown Link */
 .dropdown-link {
   @apply flex items-center gap-2 py-2 px-3 hover:bg-gray-100 text-lg font-medium;

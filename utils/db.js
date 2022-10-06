@@ -1,8 +1,7 @@
-import mongoose from 'mongoose';
-
 const connection = {};
 
 async function dbConnect() {
+  const mongoose = (await import('mongoose')).default;
   if (connection.isConnected) {
     console.log('Already Connected');
     return;
@@ -22,6 +21,7 @@ async function dbConnect() {
 }
 
 async function dbDisconnect() {
+  const mongoose = (await import('mongoose')).default;
   if (connection.isConnected) {
     if (process.env.NODE_ENV === 'production') {
       await mongoose.disconnect();

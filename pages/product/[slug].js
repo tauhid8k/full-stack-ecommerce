@@ -1,22 +1,24 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import data from '../../utils/data';
 import styles from '../../styles/Product.module.css';
 import toast, { Toaster } from 'react-hot-toast';
-import { useRouter } from 'next/router';
 import { Layout, Rating } from '../../components';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../redux/cartSlice';
+import { dbConnect, dbDisconnect } from '../../utils/db';
+import Product from '../../models/Product';
 
-const ProductScreen = () => {
-  const router = useRouter();
+const ProductScreen = ({ product }) => {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
-  const { slug } = router.query;
-  const product = data.products.find((x) => x.slug === slug);
-
   if (!product) {
-    return <div>Product Not Found!</div>;
+    return (
+      <Layout title="Not Found!">
+        <div className="full-screen">
+          <h1 className="text-2xl font-medium">Product Not Found !</h1>
+        </div>
+      </Layout>
+    );
   }
 
   // Add item to Cart
@@ -111,5 +113,19 @@ const ProductScreen = () => {
     </>
   );
 };
+
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const { slug } = params;
+  await dbConnect();
+  const response = await Product.findOne({ slug }).lean();
+  const product = await JSON.parse(JSON.stringify(response));
+  await dbDisconnect();
+  return {
+    props: {
+      product: product ? product : null,
+    },
+  };
+}
 
 export default ProductScreen;
