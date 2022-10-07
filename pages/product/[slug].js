@@ -26,12 +26,21 @@ const ProductScreen = ({ product }) => {
     // Check stock before add item to the cart
     const cartItem = cartItems.find((item) => item.slug === product.slug);
     if (qty >= product.countInStock || cartItem?.qty >= product.countInStock) {
-      toast.error('Quantity exceeds stock');
-      return;
+      return toast.error('Quantity exceeds stock', {
+        style: {
+          background: '#444',
+          color: '#fff',
+        },
+      });
     }
     // Add to cart
     dispatch(addToCart({ ...product, qty }));
-    toast.success('Item Added to Cart');
+    toast.success('Item Added to Cart', {
+      style: {
+        background: '#444',
+        color: '#fff',
+      },
+    });
   };
 
   return (

@@ -8,6 +8,7 @@ import { Layout } from '../components';
 import { removeFromCart, updateCartQty } from '../redux/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import useCart from '../utils/useCart';
+import axios from 'axios';
 
 const CartScreen = () => {
   const router = useRouter();
@@ -15,13 +16,25 @@ const CartScreen = () => {
   const { totalQty, totalPrice } = useCart();
   const { cartItems } = useSelector((state) => state.cart);
 
-  const updateCartQtyHandler = (slug, qty) => {
-    dispatch(updateCartQty({ slug, qty }));
+  const updateCartQtyHandler = async (item, qty) => {
+    const { data } = await axios.get(`/api/products/${item._id}`);
+
+    if (qty >= data.countInStock) {
+      return toast.error('Quantity exceeds stock');
+    }
+
+    dispatch(updateCartQty({ slug: item.slug, qty }));
+    toast.success('Cart Updated', {
+      style: {
+        background: '#444',
+        color: '#fff',
+      },
+    });
   };
 
   return (
     <>
-      <Toaster />
+      <Toaster position="bottom-right" />
       <Layout title="Shopping Cart">
         <div className="mt-24">
           <Link href="/">
@@ -65,10 +78,7 @@ const CartScreen = () => {
                       <select
                         value={item.qty}
                         onChange={(e) =>
-                          updateCartQtyHandler(
-                            item.slug,
-                            Number(e.target.value)
-                          )
+                          updateCartQtyHandler(item, Number(e.target.value))
                         }
                         className="form-select w-24 font-medium py-1 text-center text-lg"
                       >

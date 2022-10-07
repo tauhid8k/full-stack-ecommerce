@@ -17,12 +17,21 @@ const ProductItem = ({ product }) => {
     const { data } = await axios.get(`/api/products/${product._id}`);
 
     if (qty >= data.countInStock || cartItem?.qty >= data.countInStock) {
-      toast.error('Quantity exceeds stock');
-      return;
+      return toast.error('Quantity exceeds stock', {
+        style: {
+          background: '#444',
+          color: '#fff',
+        },
+      });
     }
     // Add to cart
     dispatch(addToCart({ ...product, qty }));
-    toast.success('Item Added to Cart');
+    toast.success('Item Added to Cart', {
+      style: {
+        background: '#444',
+        color: '#fff',
+      },
+    });
   };
 
   return (
