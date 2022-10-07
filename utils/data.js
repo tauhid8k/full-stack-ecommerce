@@ -89,6 +89,10 @@ const data = {
       description: 'A popular pants',
     },
   ],
+  paymentGateWays: [
+    { id: 1, icon: 'bkash_icon.svg', method: 'Bkash' },
+    { id: 2, icon: 'hand_money.png', method: 'Cash On Delivery' },
+  ],
 };
 
 export default data;

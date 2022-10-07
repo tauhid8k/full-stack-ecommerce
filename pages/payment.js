@@ -6,6 +6,7 @@ import { CheckoutWizard, Layout } from '../components';
 import { setPaymentMethod } from '../redux/cartSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import cookies from 'js-cookie';
+import data from '../utils/data';
 
 const PaymentScreen = () => {
   const router = useRouter();
@@ -14,11 +15,6 @@ const PaymentScreen = () => {
   const { cartItems, paymentMethod, shippingAddress } = useSelector(
     (state) => state.cart
   );
-
-  const paymentGateWays = [
-    { id: 1, icon: 'bkash_icon.svg', method: 'Bkash' },
-    { id: 2, icon: 'hand_money.png', method: 'Cash On Delivery' },
-  ];
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -64,7 +60,7 @@ const PaymentScreen = () => {
           <h1 className="text-3xl font-medium text-center mb-4">
             Payment Method
           </h1>
-          {paymentGateWays.map((payment) => (
+          {data.paymentGateWays.map((payment) => (
             <div key={payment.id} className="mb-4">
               <label
                 className={`flex items-center p-3 border-2 rounded cursor-pointer ${
@@ -108,4 +104,5 @@ const PaymentScreen = () => {
   );
 };
 
+PaymentScreen.auth = true;
 export default PaymentScreen;

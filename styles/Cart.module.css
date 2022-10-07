@@ -7,7 +7,7 @@
 }
 
 .cartList {
-  @apply flex gap-4 items-center justify-between p-3 border-b;
+  @apply flex gap-4 items-center justify-between py-3 border-b;
 }
 
 .cartList:last-child {
