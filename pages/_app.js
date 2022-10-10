@@ -32,8 +32,8 @@ function Auth({ children }) {
   if (status === 'loading') {
     return (
       <div className="min-h-screen grid place-items-center">
-        <div class="spinner w-12 h-12" role="status">
-          <span class="sr-only">Loading...</span>
+        <div className="spinner w-12 h-12" role="status">
+          <span className="sr-only">Loading...</span>
         </div>
       </div>
     );

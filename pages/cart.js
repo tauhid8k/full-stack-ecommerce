@@ -19,7 +19,7 @@ const CartScreen = () => {
   const updateCartQtyHandler = async (item, qty) => {
     const { data } = await axios.get(`/api/products/${item._id}`);
 
-    if (qty >= data.countInStock) {
+    if (qty > data.countInStock) {
       return toast.error('Quantity exceeds stock');
     }
 
