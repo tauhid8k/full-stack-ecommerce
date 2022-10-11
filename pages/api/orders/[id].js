@@ -1,6 +1,6 @@
 import { getSession } from 'next-auth/react';
-import { dbConnect, dbDisconnect } from '../../../utils/db';
 import Order from '../../../models/Order';
+import { dbConnect, dbDisconnect } from '../../../utils/db';
 
 const handler = async (req, res) => {
   const session = await getSession({ req });
@@ -8,18 +8,10 @@ const handler = async (req, res) => {
     return res.status(401).send('Login required!');
   }
 
-  const { user } = session;
   await dbConnect();
-
-  const newOrder = new Order({
-    ...req.body,
-    user: user._id,
-  });
-
-  const order = await newOrder.save();
+  const order = await Order.findById(req.query.id);
   await dbDisconnect();
-
-  res.status(201).send(order);
+  res.send(order);
 };
 
 export default handler;

@@ -48,6 +48,7 @@ const PlaceOrderScreen = () => {
         itemsPrice,
         taxPrice,
         shippingPrice,
+        totalItems: totalQty,
         totalPrice: totalDuePrice,
       });
       setLoading(false);
@@ -100,12 +101,16 @@ const PlaceOrderScreen = () => {
                 </div>
                 <h2 className="text-lg font-semibold mb-2">Shipping Address</h2>
                 <div className="text-md font-medium">
-                  <span className="block">{shippingAddress.fullName}</span>
-                  <span>
-                    {shippingAddress.address},{shippingAddress.city},
-                    {shippingAddress.postal}
+                  <span className="block mb-1">
+                    <strong>Name:</strong> {shippingAddress.fullName}
                   </span>
-                  <span className="block mb-1">{shippingAddress.mobile}</span>
+                  <span className="block mb-1">
+                    <strong>Address: </strong>
+                    {`${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.postal}`}
+                  </span>
+                  <span className="block mb-1">
+                    <strong>Mobile:</strong> {shippingAddress.mobile}
+                  </span>
                 </div>
               </div>
 
