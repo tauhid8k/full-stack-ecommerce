@@ -70,7 +70,7 @@ const OrderScreen = () => {
           <div className="text-base font-medium">
             <span className="block">{formatDate(createdAt)}</span>
             <span className="block text-yellow-600">
-              Order will expire after 2 hours if not paid at
+              Order will expire after 2 hours if not paid within
               <strong> {addDateHours(createdAt, 2)}</strong>
             </span>
           </div>
