@@ -122,7 +122,7 @@ const LoginScreen = () => {
             </button>
             <div className="text-md text-gray-500 flex items-center justify-center gap-2">
               <span>No account?</span>
-              <Link href="/register">
+              <Link href={`/register?redirect=${redirect || '/'}`}>
                 <a className="underline hover:text-blue-500">Register here</a>
               </Link>
             </div>
