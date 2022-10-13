@@ -33,7 +33,7 @@ const handler = async (req, res) => {
     toUpdateUser.name = name;
   }
 
-  if (email && email === user.email) {
+  if (email === user.email) {
     toUpdateUser.email = email;
   } else if (toCheckUserEmail) {
     res.status(422).json({
@@ -41,6 +41,8 @@ const handler = async (req, res) => {
     });
     await dbDisconnect();
     return;
+  } else {
+    toUpdateUser.email = email;
   }
   if (password) {
     toUpdateUser.password = bcrypt.hashSync(password);
