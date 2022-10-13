@@ -5,9 +5,14 @@ function formatDate(date) {
   return parseAndFormat;
 }
 
-function addDateHours(date, hours) {
-  const parseAndFormat = dayjs(date).add(hours, 'hours').format('hh:mm A');
+function formatDateShort(date) {
+  const parseAndFormat = dayjs(date).format('DD MMM YYYY');
   return parseAndFormat;
 }
 
-export { formatDate, addDateHours };
+// function addDateHours(date, hours) {
+//   const parseAndFormat = dayjs(date).add(hours, 'hours').format('hh:mm A');
+//   return parseAndFormat;
+// }
+
+export { formatDate, formatDateShort };

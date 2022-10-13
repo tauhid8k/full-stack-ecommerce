@@ -6,7 +6,7 @@ import styles from '../../styles/Cart.module.css';
 import { Layout } from '../../components';
 import { getError } from '../../utils/error';
 import axios from 'axios';
-import { formatDate, addDateHours } from '../../utils/dateFormat';
+import { formatDate } from '../../utils/dateFormat';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -69,10 +69,6 @@ const OrderScreen = () => {
           <h1 className="text-2xl font-medium">Order ID: {orderId}</h1>
           <div className="text-base font-medium">
             <span className="block">{formatDate(createdAt)}</span>
-            <span className="block text-yellow-600">
-              Order will expire after 2 hours if not paid within
-              <strong> {addDateHours(createdAt, 2)}</strong>
-            </span>
           </div>
         </div>
         {loading ? (

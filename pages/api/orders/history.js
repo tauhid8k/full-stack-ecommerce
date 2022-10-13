@@ -8,10 +8,11 @@ const handler = async (req, res) => {
     return res.status(401).send({ message: 'Login required!' });
   }
 
+  const { user } = session;
   await dbConnect();
-  const order = await Order.findById(req.query.id);
+  const orders = await Order.find({ user: user._id });
   await dbDisconnect();
-  res.send(order);
+  res.send(orders);
 };
 
 export default handler;
