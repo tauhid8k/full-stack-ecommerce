@@ -29,7 +29,7 @@ const AdminProductsScreen = () => {
   });
 
   useEffect(() => {
-    const fetchOrder = async () => {
+    const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
         const { data } = await axios.get(`/api/admin/products`);
@@ -38,7 +38,7 @@ const AdminProductsScreen = () => {
         dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
       }
     };
-    fetchOrder();
+    fetchData();
   }, []);
 
   return (
@@ -140,7 +140,11 @@ const AdminProductsScreen = () => {
                         <td className="p-4 font-bold">${product.price}</td>
                         <td className="p-4 font-bold">{product.category}</td>
                         <td className="p-4 font-bold">
-                          {product.countInStock}
+                          {product.countInStock > 0 ? (
+                            product.countInStock
+                          ) : (
+                            <span className="text-red-500">0</span>
+                          )}
                         </td>
                         <td className="p-4 font-bold">{product.rating}</td>
                         <td className="p-4 font-medium">
