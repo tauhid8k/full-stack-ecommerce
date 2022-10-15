@@ -4,6 +4,7 @@ import { Layout } from '../../components';
 import { formatDateShort, formatDate } from '../../utils/dateFormat';
 import { getError } from '../../utils/error';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -19,6 +20,8 @@ function reducer(state, action) {
 }
 
 const AdminOrdersScreen = () => {
+  const router = useRouter();
+
   const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
     loading: true,
     orders: [],
@@ -47,24 +50,54 @@ const AdminOrdersScreen = () => {
             <ul className="flex flex-col gap-4">
               <li>
                 <Link href="/admin/dashboard">
-                  <a className="font-medium text-purple-500 text-lg">
+                  <a
+                    className={`font-medium text-lg ${
+                      router.pathname === '/admin/dashboard'
+                        ? 'text-purple-500'
+                        : ''
+                    }`}
+                  >
                     Dashboard
                   </a>
                 </Link>
               </li>
               <li>
                 <Link href="/admin/orders">
-                  <a className="font-medium text-lg">Orders</a>
+                  <a
+                    className={`font-medium text-lg ${
+                      router.pathname === '/admin/orders'
+                        ? 'text-purple-500'
+                        : ''
+                    }`}
+                  >
+                    Orders
+                  </a>
                 </Link>
               </li>
               <li>
                 <Link href="/admin/products">
-                  <a className="font-medium text-lg">Products</a>
+                  <a
+                    className={`font-medium text-lg ${
+                      router.pathname === '/admin/products'
+                        ? 'text-purple-500'
+                        : ''
+                    }`}
+                  >
+                    Products
+                  </a>
                 </Link>
               </li>
               <li>
                 <Link href="/admin/users">
-                  <a className="font-medium text-lg">Users</a>
+                  <a
+                    className={`font-medium text-lg ${
+                      router.pathname === '/admin/users'
+                        ? 'text-purple-500'
+                        : ''
+                    }`}
+                  >
+                    Users
+                  </a>
                 </Link>
               </li>
             </ul>
@@ -134,8 +167,14 @@ const AdminOrdersScreen = () => {
                         </td>
                         <td className="p-4 font-medium">
                           {order.isDelivered ? (
-                            <span className="bg-green-100 text-green-600 p-1 px-3 rounded-full border border-green-400">
-                              {formatDateShort(order.deliveredAt)}
+                            <span
+                              class="bg-green-100 text-green-600 p-1 px-3 rounded-full border border-green-400"
+                              x-data="tooltip()"
+                              x-spread="tooltip"
+                              x-position="top"
+                              title={formatDate(order.deliveredAt)}
+                            >
+                              Delivered
                             </span>
                           ) : (
                             <span className="bg-yellow-100 text-yellow-600 p-1 px-3 rounded-full border border-yellow-400">

@@ -13,6 +13,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { useRouter } from 'next/router';
 
 ChartJS.register(
   CategoryScale,
@@ -46,6 +47,8 @@ function reducer(state, action) {
 }
 
 const AdminDashboardScreen = () => {
+  const router = useRouter();
+
   const [{ loading, error, summary }, dispatch] = useReducer(reducer, {
     loading: false,
     summary: { salesData: [] },
@@ -87,24 +90,54 @@ const AdminDashboardScreen = () => {
             <ul className="flex flex-col gap-4">
               <li>
                 <Link href="/admin/dashboard">
-                  <a className="font-medium text-purple-500 text-lg">
+                  <a
+                    className={`font-medium text-lg ${
+                      router.pathname === '/admin/dashboard'
+                        ? 'text-purple-500'
+                        : ''
+                    }`}
+                  >
                     Dashboard
                   </a>
                 </Link>
               </li>
               <li>
                 <Link href="/admin/orders">
-                  <a className="font-medium text-lg">Orders</a>
+                  <a
+                    className={`font-medium text-lg ${
+                      router.pathname === '/admin/orders'
+                        ? 'text-purple-500'
+                        : ''
+                    }`}
+                  >
+                    Orders
+                  </a>
                 </Link>
               </li>
               <li>
                 <Link href="/admin/products">
-                  <a className="font-medium text-lg">Products</a>
+                  <a
+                    className={`font-medium text-lg ${
+                      router.pathname === '/admin/products'
+                        ? 'text-purple-500'
+                        : ''
+                    }`}
+                  >
+                    Products
+                  </a>
                 </Link>
               </li>
               <li>
                 <Link href="/admin/users">
-                  <a className="font-medium text-lg">Users</a>
+                  <a
+                    className={`font-medium text-lg ${
+                      router.pathname === '/admin/users'
+                        ? 'text-purple-500'
+                        : ''
+                    }`}
+                  >
+                    Users
+                  </a>
                 </Link>
               </li>
             </ul>
