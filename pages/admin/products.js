@@ -23,6 +23,15 @@ function reducer(state, action) {
     case 'CREATE_FAIL':
       return { ...state, loadingCreate: false };
 
+    case 'DELETE_REQUEST':
+      return { ...state, loadingDelete: true };
+    case 'DELETE_SUCCESS':
+      return { ...state, loadingDelete: false, successDelete: true };
+    case 'DELETE_FAIL':
+      return { ...state, loadingDelete: false };
+    case 'DELETE_RESET':
+      return { ...state, loadingDelete: false, successDelete: false };
+
     default:
       return state;
   }
@@ -76,8 +85,37 @@ const AdminProductsScreen = () => {
         dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
       }
     };
-    fetchData();
-  }, []);
+    if (successDelete) {
+      dispatch({ type: 'DELETE_RESET' });
+    } else {
+      fetchData();
+    }
+  }, [successDelete]);
+
+  const deleteHandler = async (productId) => {
+    if (!window.confirm('Are you sure?')) {
+      return;
+    }
+    try {
+      dispatch({ type: 'DELETE_REQUEST' });
+      await axios.delete(`/api/admin/products/${productId}`);
+      dispatch({ type: 'DELETE_SUCCESS' });
+      toast.success('Product deleted', {
+        style: {
+          background: '#444',
+          color: '#fff',
+        },
+      });
+    } catch (error) {
+      dispatch({ type: 'DELETE_FAIL' });
+      toast.error(getError(error), {
+        style: {
+          background: '#444',
+          color: '#fff',
+        },
+      });
+    }
+  };
 
   return (
     <>
@@ -213,7 +251,10 @@ const AdminProductsScreen = () => {
                                 <span>Edit</span>
                               </a>
                             </Link>
-                            <button className="btn btn-light-danger">
+                            <button
+                              onClick={() => deleteHandler(product._id)}
+                              className="btn btn-light-danger"
+                            >
                               <span>Delete</span>
                             </button>
                           </td>

@@ -13,6 +13,8 @@ const handler = async (req, res) => {
     return getHandler(req, res, user);
   } else if (req.method === 'PUT') {
     return putHandler(req, res, user);
+  } else if (req.method === 'DELETE') {
+    return deleteHandler(req, res, user);
   } else {
     return res.status(400).send({ message: 'Method not allowed' });
   }
@@ -40,6 +42,19 @@ async function putHandler(req, res) {
     await product.save();
     await dbDisconnect();
     res.send({ message: 'Product updated' });
+  } else {
+    await dbDisconnect();
+    res.status(404).send({ message: 'Product not found' });
+  }
+}
+
+async function deleteHandler(req, res) {
+  await dbConnect();
+  const product = await Product.findById(req.query.id);
+  if (product) {
+    await product.remove();
+    await dbDisconnect();
+    res.send({ message: 'Product Deleted' });
   } else {
     await dbDisconnect();
     res.status(404).send({ message: 'Product not found' });
