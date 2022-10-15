@@ -1,17 +1,17 @@
 import Link from 'next/link';
 import { useEffect, useReducer } from 'react';
 import { Layout } from '../../components';
-import { formatDateShort, formatDate } from '../../utils/dateFormat';
+import { formatDateShort } from '../../utils/dateFormat';
 import { getError } from '../../utils/error';
-import axios from 'axios';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 function reducer(state, action) {
   switch (action.type) {
     case 'FETCH_REQUEST':
       return { ...state, loading: true, error: '' };
     case 'FETCH_SUCCESS':
-      return { ...state, loading: false, orders: action.payload, error: '' };
+      return { ...state, loading: false, products: action.payload, error: '' };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
     default:
@@ -19,12 +19,12 @@ function reducer(state, action) {
   }
 }
 
-const AdminOrdersScreen = () => {
+const AdminProductsScreen = () => {
   const router = useRouter();
 
-  const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, products }, dispatch] = useReducer(reducer, {
     loading: true,
-    orders: [],
+    products: [],
     error: '',
   });
 
@@ -32,7 +32,7 @@ const AdminOrdersScreen = () => {
     const fetchOrder = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/admin/orders`);
+        const { data } = await axios.get(`/api/admin/products`);
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (error) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
@@ -42,7 +42,7 @@ const AdminOrdersScreen = () => {
   }, []);
 
   return (
-    <Layout title="Admin Orders">
+    <Layout title="Admin Products">
       <div className="mt-24">
         <h1 className="text-2xl font-medium border-b pb-3 mb-4">Dashboard</h1>
         <div className="grid md:grid-cols-5 md:gap-5">
@@ -104,7 +104,7 @@ const AdminOrdersScreen = () => {
           </div>
 
           <div className="md:col-span-4">
-            <h1 className="text-2xl font-semibold border-b pb-4">Orders</h1>
+            <h1 className="text-2xl font-semibold border-b pb-4">Products</h1>
             {loading ? (
               <div className="mt-5 text-center">
                 <div className="spinner text-primary w-12 h-12" role="status">
@@ -121,73 +121,40 @@ const AdminOrdersScreen = () => {
                   <thead className="border-b-2 bg-white">
                     <tr>
                       <th className="px-4 text-left text-lg">ID</th>
-                      <th className="px-4 text-left text-lg">User</th>
-                      <th className="p-4 text-left text-lg">Date</th>
-                      <th className="p-4 text-left text-lg">Total</th>
-                      <th className="p-4 text-left text-lg">Paid</th>
-                      <th className="p-4 text-left text-lg">Delivered</th>
+                      <th className="px-4 text-left text-lg">Name</th>
+                      <th className="p-4 text-left text-lg">Price</th>
+                      <th className="p-4 text-left text-lg">Category</th>
+                      <th className="p-4 text-left text-lg">In Stock</th>
+                      <th className="p-4 text-left text-lg">Rating</th>
+                      <th className="p-4 text-left text-lg">Added</th>
                       <th className="p-4 text-left text-lg">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map((order) => (
-                      <tr key={order._id} className="border-b bg-white">
+                    {products.map((product) => (
+                      <tr key={product._id} className="border-b bg-white">
                         <td className="p-4 font-medium">
-                          {order._id.substring(20, 24)}
+                          {product._id.substring(20, 24)}
                         </td>
-                        <td className="p-4 font-medium">
-                          {order.user ? (
-                            order.user.name
-                          ) : (
-                            <span className="text-red-500 font-medium">
-                              deleted user
-                            </span>
-                          )}
+                        <td className="p-4 font-bold">{product.name}</td>
+                        <td className="p-4 font-bold">${product.price}</td>
+                        <td className="p-4 font-bold">{product.category}</td>
+                        <td className="p-4 font-bold">
+                          {product.countInStock}
                         </td>
+                        <td className="p-4 font-bold">{product.rating}</td>
                         <td className="p-4 font-medium">
-                          {formatDateShort(order.createdAt)}
+                          {formatDateShort(product.createdAt)}
                         </td>
-                        <td className="p-4 font-bold">${order.totalPrice}</td>
-                        <td className="p-4 font-medium">
-                          {order.isPaid ? (
-                            <span
-                              class="bg-green-100 text-green-600 p-1 px-3 rounded-full border border-green-400"
-                              x-data="tooltip()"
-                              x-spread="tooltip"
-                              x-position="top"
-                              title={formatDate(order.paidAt)}
-                            >
-                              Paid
-                            </span>
-                          ) : (
-                            <span className="bg-red-100 text-red-600 p-1 px-3 rounded-full border border-red-400">
-                              Not Paid
-                            </span>
-                          )}
-                        </td>
-                        <td className="p-4 font-medium">
-                          {order.isDelivered ? (
-                            <span
-                              class="bg-green-100 text-green-600 p-1 px-3 rounded-full border border-green-400"
-                              x-data="tooltip()"
-                              x-spread="tooltip"
-                              x-position="top"
-                              title={formatDate(order.deliveredAt)}
-                            >
-                              Delivered
-                            </span>
-                          ) : (
-                            <span className="bg-yellow-100 text-yellow-600 p-1 px-3 rounded-full border border-yellow-400">
-                              Not Delivered
-                            </span>
-                          )}
-                        </td>
-                        <td className="p-4 font-medium">
-                          <Link href={`/order/${order._id}`} passHref>
+                        <td className="p-4 font-medium flex gap-2 items-center">
+                          <Link href={`/admin/product/${product._id}`} passHref>
                             <a className="btn btn-light-primary">
-                              <span>Details</span>
+                              <span>Edit</span>
                             </a>
                           </Link>
+                          <button className="btn btn-light-danger">
+                            <span>Delete</span>
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -202,5 +169,5 @@ const AdminOrdersScreen = () => {
   );
 };
 
-AdminOrdersScreen.auth = { adminOnly: true };
-export default AdminOrdersScreen;
+AdminProductsScreen.auth = { adminOnly: true };
+export default AdminProductsScreen;
