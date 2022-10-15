@@ -68,8 +68,6 @@ const AdminDashboardScreen = () => {
     fetchData();
   }, []);
 
-  console.log(summary);
-
   const data = {
     labels: summary.salesData.map((x) => x._id),
     datasets: [
