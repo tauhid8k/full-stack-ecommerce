@@ -2,7 +2,7 @@ import Link from 'next/link';
 import styles from '../styles/Navbar.module.css';
 import useCart from '../utils/useCart';
 import { useState, useEffect } from 'react';
-import { BsCart } from 'react-icons/bs';
+import { BsCart, BsCardList } from 'react-icons/bs';
 import { FiUser } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { resetCart } from '../redux/cartSlice';
@@ -96,6 +96,17 @@ const Navbar = () => {
                       <span>Order History</span>
                     </DropdownLink>
                   </Menu.Item>
+                  {session.user.isAdmin && (
+                    <Menu.Item>
+                      <DropdownLink
+                        className="dropdown-link"
+                        href="/admin/dashboard"
+                      >
+                        <BsCardList />
+                        <span>Admin Dashboard</span>
+                      </DropdownLink>
+                    </Menu.Item>
+                  )}
                   <Menu.Item>
                     <a
                       onClick={logoutClickHandler}

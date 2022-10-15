@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     <SessionProvider session={session}>
       <Provider store={store}>
         {Component.auth ? (
-          <Auth>
+          <Auth adminOnly={Component.auth.adminOnly}>
             <Component {...pageProps} />
           </Auth>
         ) : (
@@ -20,9 +20,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   );
 }
 
-function Auth({ children }) {
+function Auth({ children, adminOnly }) {
   const router = useRouter();
-  const { status } = useSession({
+  const { status, data: session } = useSession({
     required: true,
     onUnauthenticated() {
       router.push('/unauthorized?message=Login Required');
@@ -37,6 +37,10 @@ function Auth({ children }) {
         </div>
       </div>
     );
+  }
+
+  if (adminOnly && !session.user.isAdmin) {
+    router.push('/unauthorized?message=Admin login required');
   }
 
   return children;
